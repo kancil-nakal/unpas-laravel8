@@ -5,13 +5,13 @@
     <h1 class="h2">My Post</h1>
 </div>
 
+@if (session()->has('success'))
+<div class="alert alert-success col-lg-8" role="alert">
+  {{ session('success') }}
+</div>
+@endif
 <div class="table-responsive col-lg-8">
   <a href="/dashboard/posts/create" class="btn btn-primary mb-3">Create New Post</a>
-  @if (session()->has('success'))
-  <div class="alert alert-success" role="alert">
-    {{ session('success') }}
-  </div>
-  @endif
     <table class="table table-striped table-sm">
       <thead>
         <tr>
@@ -29,8 +29,12 @@
                 <td>{{ $post->category->name }}</td>
                 <td>
                     <a href="/dashboard/posts/{{ $post->slug }}" class="badge bg-info"><i class="fas fa-eye"></i></a>
-                    <a href="" class="badge bg-warning"><i class="fas fa-edit"></i></a>
-                    <a href="" class="badge bg-danger"><i class="fas fa-trash"></i></a>
+                    <a href="/dashboard/posts/{{ $post->slug }}/edit" class="badge bg-warning"><i class="fas fa-edit"></i></a>
+                    <form action="/dashboard/posts/{{ $post->slug }}" method="post" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        <button class="badge bg-danger border-0" type="submit" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></button>
+                    </form>
                 </td>
                 </tr>
         @endforeach
